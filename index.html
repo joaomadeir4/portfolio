@@ -513,6 +513,7 @@
     }
 
     .project-card {
+      position: relative;
       background: var(--surface);
       border: 1px solid var(--border);
       border-left: 3px solid var(--accent);
@@ -530,6 +531,10 @@
       border-color: var(--accent2);
       transform: translateY(-2px);
     }
+
+    .project-card[data-category="analise-de-dados"] { --card-color: #3B82F6; }
+    .project-card[data-category="machine-learning"] { --card-color: #22C55E; }
+    .project-card[data-category="backend-python"] { --card-color: #F59E0B; }
 
     .project-card:hover .project-title { color: var(--accent2); }
 
@@ -563,6 +568,65 @@
       color: var(--accent2);
       border: 1px solid rgba(124, 92, 252, 0.25);
     }
+
+    .project-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: nowrap;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .analysis-fab {
+      box-sizing: border-box;
+      flex: 1 1 0;
+      min-width: 0;
+      justify-content: center;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      padding: 0.4rem 0.5rem;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      text-decoration: none;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: #fff;
+      background: var(--card-color, var(--accent2));
+      box-shadow: 0 2px 10px color-mix(in srgb, var(--card-color, var(--accent2)) 40%, transparent);
+      transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+    }
+
+    .analysis-fab.ghost {
+      color: var(--card-color, var(--accent2));
+      background: transparent;
+      border: 1px solid var(--card-color, var(--accent2));
+      box-shadow: none;
+    }
+
+    .analysis-fab svg {
+      width: 13px;
+      height: 13px;
+      flex-shrink: 0;
+      transition: transform 0.2s;
+    }
+
+    .analysis-fab:hover {
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 4px 16px color-mix(in srgb, var(--card-color, var(--accent2)) 55%, transparent);
+    }
+
+    .analysis-fab.ghost:hover {
+      box-shadow: none;
+      background: color-mix(in srgb, var(--card-color, var(--accent2)) 12%, transparent);
+    }
+
+    .analysis-fab:hover svg { transform: translate(2px, -2px); }
 
     /* ── EXPERIÊNCIA (TIMELINE) ── */
     .timeline {
@@ -919,19 +983,29 @@
   </div>
   <div class="projects-grid">
 
-    <a href="https://github.com/joaomadeir4/previsao-demanda-varejo-walmart" target="_blank" rel="noopener" class="project-card" data-category="analise-de-dados">
+    <div class="project-card" data-category="analise-de-dados">
       <span class="category-badge" data-category="analise-de-dados">Análise de Dados</span>
       <div class="project-title">Lucro Bruto: M5 Forecasting Accuracy</div>
-      <p class="project-desc">Motor de previsão de demanda sobre o dataset Walmart M5, com arquitetura de medalhões (Bronze/Silver/Gold), engenharia de features (lags, rolling windows, calendário) e validação via WRMSSE — traduzindo erro de previsão em impacto direto no Lucro Bruto.</p>
+      <p class="project-desc">Pipeline ETL + EDA sobre o Walmart M5 — sazonalidade, Curva ABC e impacto de feriados traduzidos em decisões de feature engineering para previsão de demanda com WRMSSE.</p>
       <div class="project-tags">
         <span class="project-tag">Python</span>
         <span class="project-tag">Forecasting</span>
         <span class="project-tag">Pipeline de Dados</span>
         <span class="project-tag">FP&A</span>
       </div>
-    </a>
+      <div class="project-actions">
+        <a href="https://github.com/joaomadeir4/previsao-demanda-varejo-walmart" target="_blank" rel="noopener" class="analysis-fab ghost">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"></path><path d="M7 7h10v10"></path></svg>
+          GitHub
+        </a>
+        <a href="https://previsao-demanda-varejo-walmart-wzi6hxjin4gt4yqzvvekaj.streamlit.app" target="_blank" rel="noopener" class="analysis-fab">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"></path><path d="M7 7h10v10"></path></svg>
+          Análise
+        </a>
+      </div>
+    </div>
 
-    <a href="https://github.com/joaomadeir4/brasileirao-data-analysis" target="_blank" rel="noopener" class="project-card" data-category="machine-learning">
+    <div class="project-card" data-category="machine-learning">
       <span class="category-badge" data-category="machine-learning">Machine Learning</span>
       <div class="project-title">Performance Analytics: Brasileirão 2024</div>
       <p class="project-desc">Modelagem preditiva com Regressão Linear (Scikit-Learn) para validar a eficácia estatística da métrica de Gols Esperados (xG) no Brasileirão 2024 — pipeline de ingestão, tratamento e visualização orientado a suporte de decisão em scouting.</p>
@@ -940,9 +1014,15 @@
         <span class="project-tag">Scikit-Learn</span>
         <span class="project-tag">Regressão Linear</span>
       </div>
-    </a>
+      <div class="project-actions">
+        <a href="https://github.com/joaomadeir4/brasileirao-data-analysis" target="_blank" rel="noopener" class="analysis-fab ghost">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"></path><path d="M7 7h10v10"></path></svg>
+          GitHub
+        </a>
+      </div>
+    </div>
 
-    <a href="https://github.com/joaomadeir4/sistema-bancario-em-python" target="_blank" rel="noopener" class="project-card" data-category="backend-python">
+    <div class="project-card" data-category="backend-python">
       <span class="category-badge" data-category="backend-python">Backend Python</span>
       <div class="project-title">Sistema Bancário em Python</div>
       <p class="project-desc">Refatoração de um sistema bancário para Programação Orientada a Objetos, aplicando abstração, herança, decorators (log automático) e iteradores/geradores — foco em clean code e separação de responsabilidades.</p>
@@ -951,7 +1031,13 @@
         <span class="project-tag">POO</span>
         <span class="project-tag">Clean Code</span>
       </div>
-    </a>
+      <div class="project-actions">
+        <a href="https://github.com/joaomadeir4/sistema-bancario-em-python" target="_blank" rel="noopener" class="analysis-fab ghost">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"></path><path d="M7 7h10v10"></path></svg>
+          GitHub
+        </a>
+      </div>
+    </div>
 
   </div>
 </section>
