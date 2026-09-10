@@ -625,7 +625,67 @@
     .filter-btn.active[data-filter="backend-python"] { background: #F59E0B; border-color: #F59E0B; }
     .filter-btn.active[data-filter="ia"] { background: #A855F7; border-color: #A855F7; }
 
-    .project-card[hidden] { display: none; }
+    .projects-deck {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      --card-color: var(--accent2);
+    }
+
+    .deck-stack {
+      position: relative;
+      width: 100%;
+      touch-action: pan-y;
+      overflow: hidden;
+      transition: height 0.35s ease;
+    }
+
+    .deck-counter {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--text);
+      letter-spacing: 0.05em;
+      opacity: 0.85;
+    }
+
+    .deck-nav-btn {
+      position: absolute;
+      top: 50%;
+      z-index: 200;
+      width: 44px;
+      height: 44px;
+      transform: translateY(-50%);
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: rgba(13, 15, 20, 0.7);
+      backdrop-filter: blur(6px);
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0.6;
+      transition: border-color 0.2s, color 0.2s, background 0.2s, opacity 0.2s, transform 0.2s;
+    }
+
+    .deck-nav-btn--prev { left: 4px; }
+    .deck-nav-btn--next { right: 4px; }
+
+    .deck-nav-btn:hover {
+      opacity: 1;
+      border-color: var(--card-color, var(--accent2));
+      color: var(--card-color, var(--accent2));
+      background: color-mix(in srgb, var(--card-color, var(--accent2)) 18%, rgba(13, 15, 20, 0.85));
+      transform: translateY(-50%) scale(1.08);
+    }
+    .deck-nav-btn svg { width: 18px; height: 18px; }
+
+    .deck-nav-btn:disabled {
+      opacity: 0 !important;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
 
     .category-badge {
       display: inline-flex;
@@ -651,18 +711,15 @@
     .category-badge[data-category="backend-python"] { color: #F59E0B; }
     .category-badge[data-category="ia"] { color: #A855F7; }
 
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-      gap: 1.75rem;
-    }
-
     .project-card {
-      position: relative;
-      background: rgba(22, 26, 35, 0.75);
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: min(600px, 92%);
+      background: rgba(22, 26, 35, 0.95);
       backdrop-filter: blur(12px);
       border: 1px solid var(--border);
-      border-left: 3px solid var(--accent);
+      border-left: 3px solid var(--card-color, var(--accent));
       border-radius: 16px;
       padding: 2.25rem;
       text-decoration: none;
@@ -670,12 +727,19 @@
       display: flex;
       flex-direction: column;
       gap: 1rem;
-      transition: border-color 0.2s, transform 0.15s, box-shadow 0.2s;
+      transform: translate(calc(-50% + var(--tx, 0px)), var(--ty, 0px)) scale(var(--scale, 1));
+      opacity: var(--card-opacity, 1);
+      z-index: var(--card-z, 1);
+      pointer-events: var(--card-pe, none);
+      transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.45s ease, border-color 0.2s, box-shadow 0.2s;
+      cursor: grab;
     }
 
-    .project-card:hover {
+    .project-card:active { cursor: grabbing; }
+    .project-card:not([data-offset="0"]) { cursor: pointer; }
+
+    .project-card[data-offset="0"]:hover {
       border-color: var(--accent2);
-      transform: translateY(-2px);
       box-shadow: 0 8px 32px rgba(46, 213, 115, 0.12);
     }
 
@@ -695,8 +759,8 @@
     }
 
     .project-desc {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.8rem;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.92rem;
       color: var(--text);
       font-weight: 400;
       line-height: 1.65;
@@ -715,7 +779,7 @@
       font-family: 'Syne', sans-serif;
       font-size: 1.4rem;
       font-weight: 700;
-      color: var(--accent2);
+      color: #7CFFB4;
       line-height: 1.15;
     }
 
@@ -747,6 +811,7 @@
       align-items: center;
       justify-content: space-between;
       flex-wrap: nowrap;
+      margin-top: auto;
       gap: 0.5rem;
       margin-top: 0.5rem;
     }
@@ -1084,10 +1149,13 @@
       }
       .project-filters::-webkit-scrollbar { display: none; }
       .filter-btn { flex-shrink: 0; scroll-snap-align: start; }
-      .projects-grid { grid-template-columns: 1fr; gap: 1.25rem; }
-      .project-card { padding: 1.5rem; }
+      .project-card { padding: 1.5rem; width: 88%; }
       .project-actions { flex-wrap: wrap; }
       .analysis-fab { flex: 1 1 auto; }
+      .deck-nav-btn { width: 34px; height: 34px; }
+      .deck-nav-btn svg { width: 14px; height: 14px; }
+      .deck-nav-btn--prev { left: 0; }
+      .deck-nav-btn--next { right: 0; }
 
       .timeline-header { flex-direction: column; align-items: flex-start; gap: 0.4rem; }
       .timeline-header-text { padding-right: 0; }
@@ -1279,7 +1347,6 @@
 
 <div class="divider"></div>
 
-<!-- PROJETOS -->
 <section id="projetos">
   <div class="section-label reveal">03 // PORTFÓLIO</div>
   <div class="projetos-header">
@@ -1292,9 +1359,16 @@
       <button class="filter-btn" data-filter="backend-python">Backend Python</button>
     </div>
   </div>
-  <div class="projects-grid reveal-group">
+  <div class="projects-deck reveal">
+   <div class="deck-stack" id="deckStack">
+    <button class="deck-nav-btn deck-nav-btn--prev" id="deckPrev" aria-label="Projeto anterior">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <button class="deck-nav-btn deck-nav-btn--next" id="deckNext" aria-label="Próximo projeto">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
 
-    <div class="project-card reveal" data-category="analise-de-dados ia">
+    <div class="project-card" data-category="analise-de-dados ia">
       <span class="category-badge" data-category="ia">Dados & IA</span>
       <div class="project-title">IPCA Dashboard</div>
       <div class="project-metric">
@@ -1322,7 +1396,7 @@
       </div>
     </div>
 
-    <div class="project-card reveal" data-category="analise-de-dados">
+    <div class="project-card" data-category="analise-de-dados">
       <span class="category-badge" data-category="analise-de-dados">Análise de Dados</span>
       <div class="project-title">Lucro Bruto: M5 Forecasting Accuracy</div>
       <div class="project-metric">
@@ -1348,7 +1422,7 @@
       </div>
     </div>
 
-    <div class="project-card reveal" data-category="machine-learning">
+    <div class="project-card" data-category="machine-learning">
       <span class="category-badge" data-category="machine-learning">Machine Learning</span>
       <div class="project-title">Performance Analytics: Brasileirão 2024</div>
       <div class="project-metric">
@@ -1369,7 +1443,7 @@
       </div>
     </div>
 
-    <div class="project-card reveal" data-category="backend-python">
+    <div class="project-card" data-category="backend-python">
       <span class="category-badge" data-category="backend-python">Backend Python</span>
       <div class="project-title">Sistema Bancário em Python</div>
       <div class="project-metric">
@@ -1390,6 +1464,8 @@
       </div>
     </div>
 
+   </div>
+   <div class="deck-counter" id="deckCounter"></div>
   </div>
 </section>
 
@@ -1606,24 +1682,144 @@
   document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
   const filterBtns = document.querySelectorAll('.filter-btn');
-  const projectCards = document.querySelectorAll('.project-card');
 
-  filterBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      filterBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      const filter = btn.dataset.filter;
+  (function initProjectsDeck() {
+    const stack = document.getElementById('deckStack');
+    if (!stack) return;
 
-      projectCards.forEach(card => {
-        const categories = card.dataset.category.split(' ');
-        if (filter === 'todos' || categories.includes(filter)) {
-          card.hidden = false;
-        } else {
-          card.hidden = true;
-        }
+    const allCards = Array.from(stack.querySelectorAll('.project-card'));
+    const deck = document.querySelector('.projects-deck');
+    const counterEl = document.getElementById('deckCounter');
+    const prevBtn = document.getElementById('deckPrev');
+    const nextBtn = document.getElementById('deckNext');
+
+    const CATEGORY_COLORS = {
+      'analise-de-dados': '#0284C7',
+      'machine-learning': '#06B6D4',
+      'backend-python': '#F59E0B',
+      'ia': '#A855F7'
+    };
+
+    const MAX_VISIBLE_DEPTH = 2;
+    const SCALE_STEP = 0.07;
+    const DEPTH_STEP_PX = 10;
+    const HIDDEN_OPACITY_DEPTH = MAX_VISIBLE_DEPTH;
+    const MOBILE_BREAKPOINT_PX = 700;
+
+    let visible = allCards.slice();
+    let activeIndex = 0;
+
+    function getPeekRatio() {
+      return window.innerWidth <= MOBILE_BREAKPOINT_PX ? 0.34 : 0.56;
+    }
+
+    function computeCardStyle(stepsFromActive, cardWidth, peekRatio) {
+      const depth = Math.min(Math.abs(stepsFromActive), HIDDEN_OPACITY_DEPTH);
+      const direction = Math.sign(stepsFromActive);
+      return {
+        tx: direction * depth * cardWidth * peekRatio,
+        ty: depth * DEPTH_STEP_PX,
+        scale: 1 - depth * SCALE_STEP,
+        opacity: depth === 0 ? 1 : depth < HIDDEN_OPACITY_DEPTH ? 0.55 : 0,
+        zIndex: 100 - depth
+      };
+    }
+
+    function render() {
+      allCards.forEach(card => { card.hidden = !visible.includes(card); });
+
+      const activeCard = visible[activeIndex];
+      const cardWidth = activeCard?.getBoundingClientRect().width || 0;
+      const peekRatio = getPeekRatio();
+
+      visible.forEach((card, i) => {
+        const stepsFromActive = i - activeIndex;
+        const isActive = stepsFromActive === 0;
+        const style = computeCardStyle(stepsFromActive, cardWidth, peekRatio);
+
+        card.dataset.offset = isActive ? '0' : '';
+        card.style.setProperty('--tx', `${style.tx}px`);
+        card.style.setProperty('--ty', `${style.ty}px`);
+        card.style.setProperty('--scale', style.scale);
+        card.style.setProperty('--card-opacity', style.opacity);
+        card.style.setProperty('--card-z', style.zIndex);
+        const depth = Math.min(Math.abs(stepsFromActive), HIDDEN_OPACITY_DEPTH);
+        card.style.setProperty('--card-pe', depth <= 1 ? 'auto' : 'none');
+      });
+
+      if (activeCard) {
+        stack.style.height = `${activeCard.offsetHeight + MAX_VISIBLE_DEPTH * DEPTH_STEP_PX}px`;
+      }
+
+      updateCounter();
+    }
+
+    function updateCounter() {
+      const active = visible[activeIndex];
+      if (active) {
+        const categories = active.dataset.category.split(' ');
+        const color = CATEGORY_COLORS[categories[categories.length - 1]] || CATEGORY_COLORS[categories[0]];
+        deck.style.setProperty('--card-color', color || 'var(--accent2)');
+      }
+
+      counterEl.textContent = visible.length
+        ? `${String(activeIndex + 1).padStart(2, '0')} / ${String(visible.length).padStart(2, '0')}`
+        : '';
+      prevBtn.disabled = activeIndex <= 0;
+      nextBtn.disabled = activeIndex >= visible.length - 1;
+    }
+
+    function goNext() { if (activeIndex < visible.length - 1) { activeIndex++; render(); } }
+    function goPrev() { if (activeIndex > 0) { activeIndex--; render(); } }
+    function goTo(index) { if (index >= 0 && index < visible.length) { activeIndex = index; render(); } }
+
+    prevBtn.addEventListener('click', goPrev);
+    nextBtn.addEventListener('click', goNext);
+
+    stack.addEventListener('click', e => {
+      const card = e.target.closest('.project-card');
+      if (!card || card.dataset.offset === '0') return;
+      e.preventDefault();
+      e.stopPropagation();
+      goTo(visible.indexOf(card));
+    }, true);
+
+    let dragStartX = 0, dragStartY = 0, isDragging = false;
+    const SWIPE_THRESHOLD_PX = 40;
+
+    stack.addEventListener('pointerdown', e => {
+      dragStartX = e.clientX;
+      dragStartY = e.clientY;
+      isDragging = true;
+    });
+
+    stack.addEventListener('pointerup', e => {
+      if (!isDragging) return;
+      isDragging = false;
+      const deltaX = e.clientX - dragStartX;
+      const deltaY = e.clientY - dragStartY;
+      if (Math.abs(deltaX) < SWIPE_THRESHOLD_PX || Math.abs(deltaX) < Math.abs(deltaY)) return;
+      deltaX < 0 ? goNext() : goPrev();
+    });
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const filter = btn.dataset.filter;
+        visible = allCards.filter(card =>
+          filter === 'todos' || card.dataset.category.split(' ').includes(filter)
+        );
+        activeIndex = 0;
+        render();
       });
     });
-  });
+
+    window.addEventListener('resize', render);
+
+    render();
+  })();
 </script>
 
 </body>
